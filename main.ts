@@ -1,3 +1,15 @@
+namespace SpriteKind {
+    export const Live = SpriteKind.create()
+}
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    controller.moveSprite(Panda, 100, 100)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Live, function (sprite, otherSprite) {
+    music.powerUp.play()
+    otherSprite.destroy()
+    sprite.startEffect(effects.starField, 200)
+    info.changeLifeBy(1)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     music.baDing.play()
     otherSprite.destroy()
@@ -5,7 +17,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     info.changeScoreBy(500)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    music.powerDown.play()
+    music.wawawawaa.play()
     scene.cameraShake(4, 500)
     otherSprite.destroy(effects.blizzard, 500)
     sprite.startEffect(effects.rings, 200)
@@ -14,7 +26,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 })
 let projectile: Sprite = null
 let projectile2: Sprite = null
-effects.confetti.startScreenEffect()
+let projectile3: Sprite = null
+let Panda: Sprite = null
+scene.setBackgroundColor(9)
 let Junk_Food = [img`
     ......................bbb.......
     ....................bb333b......
@@ -115,7 +129,7 @@ let Junk_Food = [img`
     ...45dd55444....................
     ....44444.......................
     `]
-let Panda = sprites.create(img`
+Panda = sprites.create(img`
     . . . . f f f f f . . . . . . . 
     . . . f e e e e e f . . . . . . 
     . . f d d d d e e e f . . . . . 
@@ -151,19 +165,37 @@ let Cherry = [img`
     . . . . . . . . c e 2 2 2 2 c . 
     . . . . . . . . . c c c c c . . 
     `]
+let New_live = [img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . 8 8 8 8 . . . . . . . 
+    . . . . . 8 8 8 8 . . . . . . . 
+    . . . . . 8 8 8 8 . . . . . . . 
+    . . . . . 8 8 8 8 . . . . . . . 
+    . 8 8 8 8 8 8 8 8 8 8 8 8 . . . 
+    . 8 8 8 8 8 8 8 8 8 8 8 8 . . . 
+    . 8 8 8 8 8 8 8 8 8 8 8 8 . . . 
+    . 8 8 8 8 8 8 8 8 8 8 8 8 . . . 
+    . . . . . 8 8 8 8 . . . . . . . 
+    . . . . . 8 8 8 8 . . . . . . . 
+    . . . . . 8 8 8 8 . . . . . . . 
+    . . . . . 8 8 8 8 . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `]
 Panda.setPosition(74, 95)
 Panda.setFlag(SpriteFlag.StayInScreen, true)
 info.setLife(3)
 info.setScore(0)
-game.onUpdateInterval(5000, function () {
+game.onUpdateInterval(12000, function () {
+    projectile3 = sprites.createProjectileFromSide(New_live[randint(0, New_live.length - 1)], 0, 75)
+    projectile3.setKind(SpriteKind.Live)
+    projectile3.x = randint(10, 100)
+})
+game.onUpdateInterval(7000, function () {
     projectile2 = sprites.createProjectileFromSide(Cherry[randint(0, Cherry.length - 1)], 0, 75)
     projectile2.setKind(SpriteKind.Food)
     projectile2.x = randint(10, 100)
-})
-game.onUpdateInterval(1000, function () {
-    projectile = sprites.createProjectileFromSide(Junk_Food[randint(0, Junk_Food.length - 1)], 0, 75)
-    projectile.setKind(SpriteKind.Enemy)
-    projectile.x = randint(10, 150)
 })
 forever(function () {
     if (controller.right.isPressed()) {
@@ -171,4 +203,9 @@ forever(function () {
     } else if (controller.left.isPressed()) {
         Panda.x += -5
     }
+})
+game.onUpdateInterval(500, function () {
+    projectile = sprites.createProjectileFromSide(Junk_Food[randint(0, Junk_Food.length - 1)], 0, 100)
+    projectile.setKind(SpriteKind.Enemy)
+    projectile.x = randint(10, 150)
 })

@@ -14,6 +14,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     otherSprite.destroy()
     sprite.startEffect(effects.hearts, 200)
     info.changeScoreBy(500)
+    if (info.score() == 50000) {
+        game.over(true, effects.confetti)
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     music.stopAllSounds()
@@ -151,8 +154,13 @@ scene.setBackgroundImage(img`
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     `)
+let Input = game.askForString("What is your name?")
+game.splash("Hello " + Input + "!!")
+game.splash("Welcome to Candy Pandy!!")
 game.showLongText("Avoid the candy and take the cherrys!", DialogLayout.Bottom)
 game.showLongText("Take the plus sign to get a new live!", DialogLayout.Bottom)
+game.showLongText("The goal is to get 50,000 points!", DialogLayout.Bottom)
+game.splash("Good Luck!")
 let Junk_Food = [img`
     ......................bbb.......
     ....................bb333b......
@@ -319,9 +327,9 @@ game.onUpdateInterval(12000, function () {
 })
 game.onUpdateInterval(time, function () {
     projectile = sprites.createProjectileFromSide(Junk_Food[randint(0, Junk_Food.length - 1)], 0, 100)
-    time += -500
     projectile.setKind(SpriteKind.Enemy)
     projectile.x = randint(10, 150)
+    time += -500
 })
 game.onUpdateInterval(7000, function () {
     projectile2 = sprites.createProjectileFromSide(Cherry[randint(0, Cherry.length - 1)], 0, 75)
